@@ -10,8 +10,8 @@ export const signUp = (data) => async (dispatch) => {
 
     auth().createUserWithEmailAndPassword(email, password)
     .then((data) => {
-        console.log(data)
-        console.log("User creation was succes")
+        // console.log(data)
+        // console.log("User creation was succes")
      dispatch({
         type: IS_AUTHTHENTICATED,
         payload: true
@@ -35,7 +35,7 @@ export const signUp = (data) => async (dispatch) => {
     })
     .catch((error) => {
         if (error.code === 'auth/email-already-in-use') {
-            console.log('That email address is already in use!');
+          
             Snackbar.show({
                 text: "That email address is already in use!",
                 textColor: 'white',
@@ -63,7 +63,7 @@ export const signIn = (data, navigation) => async (dispatch) => {
     auth()
         .signInWithEmailAndPassword(email, password)
             .then( async(data) => {
-                console.log(data.user,'dd');
+               
                 const user={
                     uid:data.user.uid,
                     email:data.user.email
@@ -91,7 +91,7 @@ export const signIn = (data, navigation) => async (dispatch) => {
                
             })
             .catch((error) => {
-                console.error(error)
+                
                 Snackbar.show({
                     text: "Signin failed",
                     textColor: "white",
@@ -111,7 +111,7 @@ export const signOut = () => async (dispatch) => {
         })
     })
     .catch((error) => {
-        console.log(error)
+       
         Snackbar.show({
             text: "Signout failed",
             textColor: "white",

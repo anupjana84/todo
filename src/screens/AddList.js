@@ -4,21 +4,18 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
-  Keyboard,
-  StatusBar,
+
 } from 'react-native';
 import React,{useState} from 'react';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+
 import Entypo from 'react-native-vector-icons/Entypo';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import {Select,} from 'native-base'
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Heading, TextArea} from 'native-base';
 const windowHeight = Dimensions.get('window').height;
-import {useDispatch, connect} from 'react-redux';
+import { connect} from 'react-redux';
 import { addTodo } from '../action/todo';
 import moment from 'moment';
  

@@ -22,6 +22,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {connect} from 'react-redux';
 import {getTodo, deleteList} from '../action/todo';
@@ -32,34 +33,25 @@ const Home = ({authState, todo, navigation, getTodo, deleteList}) => {
   const hourAndMunit=moment().format('HH ')
   const hourAndMunit1=parseInt(moment().format('mm '))
   const totalHm =hourAndMunit*60 +hourAndMunit1
- console.log(typeof tday);
+ 
   
   const isFocused = useIsFocused();
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef();
-  const deleteAddd = id => {
-    deleteList(id);
-    //getTodo(authState.user.uid)
+  const logout = async() => {
+      await  AsyncStorage.removeItem('@user')
+      onClose()
+        navigation.replace('SingUp')
+
   };
   useEffect(() => {
     getTodo(authState.user.uid);
   }, [isFocused]);
 
-   const dateDisplay=(data)=>{
-    let d1 = moment("2018-05-19");
-    let d2 = moment("2018-05-20");
-    let d3 = moment("2018-05-22");
-    if (d1.isAfter(d2)) {
-
-      console.log(`${d1.format('ll')} is after ${d2.format('ll')}`);
-  } else {
   
-      console.log(`${d1.format('ll')} is before ${d2.format('ll')}`);
-  }
-   }
   const renderItemList = ({item}) => {
-      //console.log(item);
+      // console.log(item.id);
     return (
       <>
         <View style={{width: '100%', height: 80, marginVertical: 15}}>
@@ -83,11 +75,9 @@ const Home = ({authState, todo, navigation, getTodo, deleteList}) => {
                
               </Text>
             
-              <Text>{ moment.duration(`00:${item.time}`).asSeconds()}</Text>
-              {/* <Text>{moment.duration(item.time).asMinutes()}</Text> */}
-              <Text>{moment(item.time, ['HH:mm']).format(
-              'hh:mm A',
-            )}</Text>
+              <Text>{item.category}</Text>
+             
+              <Text></Text>
             </View>
             <View
               style={{
@@ -97,7 +87,7 @@ const Home = ({authState, todo, navigation, getTodo, deleteList}) => {
                 justifyContent: 'flex-end',
               }}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('EditList', {data: item})}>
+                onPress={() => navigation.navigate('EditList',item)}>
                 <MaterialIcons
                   name="edit"
                   size={24}
@@ -116,7 +106,7 @@ const Home = ({authState, todo, navigation, getTodo, deleteList}) => {
             </View>
           </View>
         </View>
-        <Center>
+        {/* <Center>
           <AlertDialog
             leastDestructiveRef={cancelRef}
             isOpen={isOpen}
@@ -141,7 +131,7 @@ const Home = ({authState, todo, navigation, getTodo, deleteList}) => {
               </AlertDialog.Footer>
             </AlertDialog.Content>
           </AlertDialog>
-        </Center>
+        </Center> */}
       </>
     );
   };
@@ -151,11 +141,13 @@ const Home = ({authState, todo, navigation, getTodo, deleteList}) => {
         <StatusBar backgroundColor="#6284f7" barStyle="light-content" />
         <View style={styles.header}>
           <SimpleLineIcons name="arrow-left" size={20} color="white" />
+          <TouchableOpacity onPress={()=>setIsOpen(!isOpen)}>
           <MaterialCommunityIcons
             name="dots-vertical"
             size={24}
             color="white"
           />
+          </TouchableOpacity>
         </View>
         <View style={{height:'30%', backgroundColor:'#6284f7', width:'100%',flexDirection:'row'}}>
           <View style={{width:'30%',  height:'100%', justifyContent:'flex-start',
@@ -193,6 +185,32 @@ const Home = ({authState, todo, navigation, getTodo, deleteList}) => {
           icon={<Icon color="white" as={<AntDesign name="plus" />} size="sm" />}
         />
       </View>
+      <Center>
+          <AlertDialog
+            leastDestructiveRef={cancelRef}
+            isOpen={isOpen}
+            motionPreset={'fade'}>
+            <AlertDialog.Content>
+              <AlertDialog.Header fontSize="lg" fontWeight="bold">
+               Logout
+              </AlertDialog.Header>
+              <AlertDialog.Body>
+                Are you sure? Want to Logout.
+              </AlertDialog.Body>
+              <AlertDialog.Footer>
+                <Button ref={cancelRef} onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  colorScheme="red"
+                  onPress={ logout}
+                  ml={3}>
+                  Delete
+                </Button>
+              </AlertDialog.Footer>
+            </AlertDialog.Content>
+          </AlertDialog>
+        </Center>
     </>
   );
 };

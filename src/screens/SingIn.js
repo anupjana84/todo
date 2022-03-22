@@ -1,11 +1,12 @@
-import {StyleSheet, Text, TouchableOpacity, StatusBar, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, StatusBar,Image,Dimensions, View} from 'react-native';
 import React,{useState, useEffect} from 'react';
-import {Input, Icon, Stack,Heading ,Box, useToast,FormControl} from 'native-base';
+import {Input, Icon, Stack,Heading ,Box, useToast,FormControl, ScrollView} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import auth from '@react-native-firebase/auth'
 import {connect} from 'react-redux'
 import {signIn} from '../action/auth'
 import propTypes from 'prop-types'
+const windowHeight = Dimensions.get('window').height;
 
 const SignIn = ({signIn,navigation}) => {
   
@@ -47,22 +48,22 @@ const SignIn = ({signIn,navigation}) => {
       },
     });
   };
-  const dataSave= async()=>{
-    auth().signInWithEmailAndPassword(email, password)
-    .then((data) => {
-        alertTossata('Sing in Successfully', '#4DD637') 
-    })
-    .catch((error) => {
-     console.error(error,'error');
-      if (error.code === 'auth/email-already-in-use') {
-        alertTossata('That email address is already in use!', 'red')
-      }
-      if (error.code === 'auth/invalid-email') {
-        alertTossata('That email address is invalid!','red');
-      }
-    })
+  // const dataSave= async()=>{
+  //   auth().signInWithEmailAndPassword(email, password)
+  //   .then((data) => {
+  //       alertTossata('Sing in Successfully', '#4DD637') 
+  //   })
+  //   .catch((error) => {
+  //    console.error(error,'error');
+  //     if (error.code === 'auth/email-already-in-use') {
+  //       alertTossata('That email address is already in use!', 'red')
+  //     }
+  //     if (error.code === 'auth/invalid-email') {
+  //       alertTossata('That email address is invalid!','red');
+  //     }
+  //   })
 
-  }
+  // }
   const submit= ()=>{
     if (!password || !email ) {
       alertTossata('All Feild Required', 'red')
@@ -76,10 +77,12 @@ const SignIn = ({signIn,navigation}) => {
     }
   }
   return (
+    <>
+    <ScrollView showsVerticalScrollIndicator={false}>
     <View style={styles.continer}>
       <StatusBar hidden={true}/>
         <View style={styles.header}>
-        <Heading size="md">Hello Again!</Heading>
+        <Heading size="md">Hello Login Here!</Heading>
         <Text style={{fontSize:18}}>Wellcome back you've</Text>
         <Text style={{fontSize:18}}>been missed!</Text>
        
@@ -178,12 +181,49 @@ const SignIn = ({signIn,navigation}) => {
         </TouchableOpacity>
       </View>
        {/* ====lower===== */}
-      <View style={styles.lower}>
-        <View ></View>
+       <View style={styles.lower}>
+          <View style={styles.lowerTop} >
+              <Text style={{fontSize:15, fontWeight:'600'}}>Or connect with</Text>
+          </View>
+          <View style={styles.lowerMiddle}>
+            <View style={styles.lowerMiddleBox}>
+              <Image
+                style={styles.logoImage}
+                source={require('../../src/assets/gg.png')}
+              />
+            </View>
+            <View style={styles.lowerMiddleBox} >
+            <Image
+                style={styles.logoImage}
+                source={require('../../src/assets/ap.png')}
+              />
+            </View>
+            
+            <View style={styles.lowerMiddleBox} >
+            <Image
+                style={styles.logoImage}
+                source={require('../../src/assets/pp.png')}
+              />
+            </View>
+          </View>
+          <View style={styles.lowerLower}>
+                <Text style={{fontSize:15, fontWeight:'600'}}>
+                Not a member ?  </Text>
+                   <TouchableOpacity onPress={()=>navigation.navigate('SingUp')}>
 
-      </View>
-       {/* ====lower===== */}
+                   
+                 <Text style={{fontSize:15, fontWeight:'600', color:'#6284f7',marginLeft:5}}>
+                 Register Now
+              
+                </Text>
+                </TouchableOpacity>
+                
+          </View>
+        </View>
+        {/* ====lower===== */}
     </View>
+    </ScrollView>
+    </>
   );
 };
 
@@ -200,7 +240,7 @@ export default connect(null, {signIn})(SignIn)
 
 const styles = StyleSheet.create({
   continer: {
-    flex: 1,
+    height:windowHeight,
     backgroundColor:'#e5f2f9'
     
   },
@@ -229,5 +269,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 50,
     alignSelf:'center'
-  },
-});
+  }, lowerTop: {width: '100%', height: '15%', justifyContent:"center",
+  alignItems:"center"},
+    lowerMiddle: {
+      width: '100%',
+      height: '70%',
+     
+      justifyContent: 'space-around',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    lowerMiddleBox: {
+      width: 100,
+      height: 80,
+      borderRadius: 10,
+      borderWidth: 2.5,
+      borderColor: 'white',
+      justifyContent:"center",
+      alignItems:'center'
+    },
+    logoImage: {
+      width: 50,
+      height: 50,
+      resizeMode: 'center',
+    },
+    lowerLower:{
+        width:'100%',
+        height:'15%',
+        justifyContent:"center",
+        alignItems:"flex-start",
+        flexDirection:'row',
+        
+        
+    }
+  });
+  

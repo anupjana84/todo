@@ -6,7 +6,7 @@ export const getPosts = () => async (dispatch) => {
     database()
       .ref('/posts/')
       .on('value', (snapshot) => {
-        console.log('User data: ', snapshot.val());
+        
         if (snapshot.val()) {
           dispatch({
             type: SET_POST,

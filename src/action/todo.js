@@ -27,7 +27,7 @@ export const getTodo = data => async dispatch => {
     });
 };
 export const addTodo = (data, navigation) => async dispatch => {
-  console.log(data.dateCheck);
+  
   const {name, time,pdate,category,dateCheck, userId} = data;
   firestore()
     .collection('todoList')
@@ -74,4 +74,50 @@ export const deleteList = id => async dispatch => {
         backgroundColor: '#E6425E',
       });
     });
+};
+export const editList = (data, navigation) => async dispatch => {
+ const{name,time,pdate,category,dateCheck,id}=data
+
+  firestore()
+  .collection('todoList')
+  .doc(id)
+  .update({
+    name: name,
+    time: time,
+    pdate:pdate,
+    category:category,
+    dateCheck:dateCheck,
+   
+  })
+  .then(data => {
+console.log(data);
+    Snackbar.show({
+            text: 'Updated Successfully',
+            textColor: 'white',
+            backgroundColor: '#E6425E',
+          });
+          navigation.navigate('Home');
+    // Snackbar.show({
+    //   text: 'Success',
+    //   textColor: 'white',
+    //   backgroundColor: '#E6425E',
+    // });
+    // dispatch({
+    //   type: REMOVE_TODO,
+    //   payload: {id: id},
+    // });
+    // Snackbar.show({
+    //   text: 'Remove Successfully',
+    //   textColor: 'white',
+    //   backgroundColor: '#E6425E',
+    // });
+  })
+  .catch(error => {
+    console.log(error);
+    Snackbar.show({
+      text: 'Error removing document',
+      textColor: 'white',
+      backgroundColor: '#E6425E',
+    });
+ });
 };
